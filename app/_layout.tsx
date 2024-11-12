@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import { Slot } from "expo-router";
 import React from "react";
 import RenderManagerProvider from "../provider/RenderManagerProvider";
-import { Header } from "react-native/Libraries/NewAppScreen";
+import Header from "../components/Header";
 
 const Layout = () => {
     return (
