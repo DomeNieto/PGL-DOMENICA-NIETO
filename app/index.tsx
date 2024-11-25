@@ -33,6 +33,12 @@ export default function WelcomePage() {
 
             ]}>INGRESAR</Link>
 
+            <Link href="shopping-list" onPress={() => setIsListRendered(!isListRendered)} style={[
+                styles.pressable,
+                { color: darkMode ? colors.bottomLightColor : colors.primaryLightColor, backgroundColor: darkMode ? colors.bottomDarkColor : colors.bottomLightColor },
+
+            ]}>LISTA DE COMPRAS</Link>
+
             <Text style={[
                 styles.description,
                 { color: darkMode ? colors.primaryLightColor : colors.primaryDarkColor },
@@ -71,7 +77,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         justifyContent: "center",
         width: "60%",
-        marginTop: 200,
+        marginTop: "40%",
         marginBottom: 10,
     },
     pressable: {
