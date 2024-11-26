@@ -1,10 +1,20 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Product } from './interface/Product';
-import { StyleSheet, View, Text, FlatList, Pressable, Modal, Image } from "react-native";
+import { StyleSheet, View, Text, FlatList, Pressable, Image } from "react-native";
 import { colors } from '../../styles/Colors';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from "uuid";
+import React from 'react';
+import { ProductItem } from '../../components/ShoppingList/ProductItem';
 
 export const ShoppingListPage = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const initializeProducts = () => [
+        { id: uuidv4(), name: 'Manzanas', category: 'frutas/verduras', quantity: 2, unitPrice: 1.5, inCart: false },
+        { id: uuidv4(), name: 'Pan', category: 'panaderia', quantity: 1, unitPrice: 2.0, inCart: false },
+        { id: uuidv4(), name: 'Leche', category: 'bebidas', quantity: 3, unitPrice: 1.2, inCart: false },
+    ];
+
+    const [products, setProducts] = useState<Product[]>(initializeProducts);
 
     const totalPrice = products.reduce(
         (acc, product) => (product.inCart ? acc : acc + product.quantity * product.unitPrice),
@@ -26,6 +36,17 @@ export const ShoppingListPage = () => {
                 />
                 <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
             </View>
+            <FlatList
+                data={products}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <ProductItem
+                        product={item}
+                    />
+                )}
+                ListEmptyComponent={<Text style={styles.emptyText}>La lista está vacía</Text>}
+            />
+
             <View style={styles.containerButtons}>
                 <Pressable style={styles.addButton}>
                     <Text style={styles.addButtonText}>Añadir Producto</Text>
@@ -40,7 +61,8 @@ export const ShoppingListPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 3
+        padding: 3,
+        //alignItems: "center"
     },
     containerTitle: {
         width: "100%",
@@ -69,7 +91,7 @@ const styles = StyleSheet.create({
     },
     containerButtons: {
         //alignItems: "center",
-        marginLeft: "33%",
+        marginLeft: "35%",
         position: "absolute",
         bottom: "15%"
     },
@@ -83,5 +105,10 @@ const styles = StyleSheet.create({
     },
     addButtonText: {
         color: colors.primaryLightColor,
-    }
+    },
+    emptyText: {
+        textAlign: "center",
+        //fontStyle: "italic",
+        marginTop: 20
+    },
 });
