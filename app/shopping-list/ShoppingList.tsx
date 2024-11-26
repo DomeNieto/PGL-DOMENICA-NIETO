@@ -6,6 +6,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from "uuid";
 import React from 'react';
 import { ProductItem } from '../../components/ShoppingList/ProductItem';
+import { ProductForm } from '../../components/ShoppingList/ProductForm';
 
 export const ShoppingListPage = () => {
     const initializeProducts = () => [
@@ -15,14 +16,32 @@ export const ShoppingListPage = () => {
     ];
 
     const [products, setProducts] = useState<Product[]>(initializeProducts);
+    const [formModalVisible, setFormModalVisible] = useState(false);
+    const [formData, setFormData] = useState({
+        id: "",
+        name: "",
+        category: "others",
+        quantity: "",
+        unitPrice: "",
+        inCart: false
+    });
 
     const totalPrice = products.reduce(
         (acc, product) => (product.inCart ? acc : acc + product.quantity * product.unitPrice),
         0
     );
 
+    const toggleFormModal = () => setFormModalVisible(!formModalVisible);
+
+
     const handleDeleteProduct = (id: string) => {
         setProducts((prev) => prev.filter((product) => product.id !== id));
+
+    };
+
+    const handleAddProduct = (product: Product) => {
+        setProducts((prev) => [...prev, { ...product, id: uuidv4() }]);
+        toggleFormModal();
     };
 
     return (
@@ -40,6 +59,7 @@ export const ShoppingListPage = () => {
                 />
                 <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
             </View>
+
             <FlatList
                 data={products}
                 keyExtractor={(item) => item.id}
@@ -47,17 +67,24 @@ export const ShoppingListPage = () => {
                     <ProductItem
                         product={item}
                         onDelete={handleDeleteProduct}
+
                     />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>La lista está vacía</Text>}
             />
 
-            <View style={styles.containerButtons}>
-                <Pressable style={styles.addButton}>
-                    <Text style={styles.addButtonText}>Añadir Producto</Text>
-                </Pressable>
-            </View>
-
+            {!formModalVisible && (
+                <View style={styles.containerButtons}>
+                    <Pressable style={styles.addButton} onPress={toggleFormModal}>
+                        <Text style={styles.addButtonText}>Añadir Producto</Text>
+                    </Pressable>
+                </View>
+            )}
+            <ProductForm
+                visible={formModalVisible}
+                onSave={handleAddProduct}
+                onCancel={toggleFormModal}
+            />
         </View>
 
     );
@@ -67,7 +94,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 3,
-        //alignItems: "center"
     },
     containerTitle: {
         width: "100%",
