@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
         //alignItems: "center",
         marginLeft: "35%",
         position: "absolute",
-        bottom: "15%"
+        top: "80%",
     },
     addButton: {
         backgroundColor: colors.bottomLightColor,
