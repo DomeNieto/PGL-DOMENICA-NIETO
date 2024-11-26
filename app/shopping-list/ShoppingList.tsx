@@ -20,13 +20,14 @@ export const ShoppingListPage = () => {
     const [formModalVisible, setFormModalVisible] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-
     const totalPrice = products.reduce(
         (acc, product) => (product.inCart ? acc + product.quantity * product.unitPrice : acc),
         0
     );
 
     const toggleFormModal = () => setFormModalVisible(!formModalVisible);
+
+    const handleDeleteAll = () => { setProducts([]) };
 
     const handleDeleteProduct = (id: string) => {
         setProducts((prev) => prev.filter((product) => product.id !== id));
@@ -97,6 +98,12 @@ export const ShoppingListPage = () => {
                         <Pressable style={styles.addButton} onPress={toggleFormModal}>
                             <Text style={styles.addButtonText}>Añadir Producto</Text>
                         </Pressable>
+
+                        {products.length > 0 ? (
+                            <Pressable style={styles.clearButton} onPress={handleDeleteAll}>
+                                <Text style={styles.clearButtonText}>Limpiar Lista</Text>
+                            </Pressable>
+                        ) : <></>}
                     </View>
                 </>
             )}
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 10,
         borderRadius: 5,
-        width: "100%",
+        // width: "5%",
         alignItems: "center"
     },
     addButtonText: {
@@ -170,4 +177,14 @@ const styles = StyleSheet.create({
         //fontStyle: "italic",
         marginTop: 20
     },
+    clearButton: {
+        backgroundColor: colors.textLightMode,
+        padding: 10,
+        marginTop: 10,
+        borderRadius: 5,
+        alignItems: "center"
+    },
+    clearButtonText: {
+        color: colors.primaryLightColor
+    }
 });
