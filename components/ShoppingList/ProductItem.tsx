@@ -36,7 +36,7 @@ export function ProductItem({ product, onDelete, onEdit, onToggleInCart }: Produ
             </View>
             <View>
                 <Pressable onPress={() => onToggleInCart(product.id)}>
-                    <Text style={styles.stateButton}>{product.inCart ? "Pendiente" : "Obtenido"}</Text>
+                    <Text style={styles.stateButton}>{product.inCart ? "Obtenido" : "Pedir"}</Text>
                 </Pressable>
                 <Pressable onPress={() => onEdit(product)}>
                     <Text style={styles.editButton}>Editar</Text>
