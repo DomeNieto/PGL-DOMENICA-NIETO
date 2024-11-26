@@ -16,19 +16,12 @@ const categories = [
 
 export type ProductFormProps = {
     visible: boolean;
-    initialData?: {
-        id: string;
-        name: string;
-        category: string;
-        quantity: string;
-        unitPrice: string;
-        inCart: boolean
-    };
+    initialData?: Product | null;
     onSave: (productData: Product) => void;
     onCancel: () => void;
 }
-export function ProductForm({ visible, initialData, onSave, onCancel }: ProductFormProps) {
 
+export function ProductForm({ visible, initialData, onSave, onCancel }: ProductFormProps) {
     const [formData, setFormData] = useState({
         name: initialData?.name || "",
         category: initialData?.category || "others",
@@ -58,7 +51,7 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
             id: initialData?.id || "",
             name: formData.name.trim(),
             category: formData.category,
-            quantity: parseInt(formData.quantity, 10),
+            quantity: parseInt(formData.quantity),
             unitPrice: parseFloat(formData.unitPrice),
             inCart: initialData?.inCart || false,
         });
@@ -68,7 +61,7 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.container}>
                 <Text style={styles.header}>
-                    Añadir Producto
+                    {initialData ? "Editar Producto" : "Añadir Producto"}
                 </Text>
                 <TextInput
                     style={styles.input}
@@ -112,6 +105,7 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
         </Modal>
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         padding: 20,
@@ -119,7 +113,8 @@ const styles = StyleSheet.create({
         margin: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: colors.bottomLightColor
+        borderColor: colors.bottomLightColor,
+        marginVertical: "50%"
     },
     header: {
         fontSize: 20,
