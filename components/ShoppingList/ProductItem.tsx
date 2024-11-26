@@ -28,7 +28,7 @@ export function ProductItem({ product, onDelete, onEdit, onToggleInCart }: Produ
         <View style={styles.container}>
             <Image source={getCategoryImage(product.category)} style={styles.image} />
             <View style={styles.details}>
-                <Text>
+                <Text style={product.inCart ? styles.name : styles.pendingText}>
                     {product.name}
                 </Text>
                 <Text>Cantidad: {product.quantity}</Text>
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: colors.primaryLightColor,
         backgroundColor: colors.tabBarActiveColor,
-        padding: 5
+        padding: 5,
+
     },
     editButton: {
         color: colors.primaryLightColor,
@@ -100,7 +101,11 @@ const styles = StyleSheet.create({
         padding: 5,
         textAlign: "center",
         borderRadius: 3
-    }
+    },
+    name: {
+        textDecorationLine: "line-through"
+    },
+    pendingText: {}
 
 
 
