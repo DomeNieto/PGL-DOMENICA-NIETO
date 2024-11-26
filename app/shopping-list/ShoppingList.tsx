@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Product } from './interface/Product';
 import { StyleSheet, View, Text, FlatList, Pressable, Image } from "react-native";
+
 import { colors } from '../../styles/Colors';
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from "uuid";
-import React from 'react';
+import { Product } from './interface/Product';
 import { ProductItem } from '../../components/ShoppingList/ProductItem';
 import { ProductForm } from '../../components/ShoppingList/ProductForm';
+
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from "uuid";
 
 export const ShoppingListPage = () => {
     const initializeProducts = () => [
@@ -21,7 +22,7 @@ export const ShoppingListPage = () => {
 
 
     const totalPrice = products.reduce(
-        (acc, product) => (product.inCart ? acc : acc + product.quantity * product.unitPrice),
+        (acc, product) => (product.inCart ? acc + product.quantity * product.unitPrice : acc),
         0
     );
 
@@ -74,7 +75,7 @@ export const ShoppingListPage = () => {
                         <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
                     </View>
 
-                    <View>
+                    <View style={styles.containerList}>
                         <FlatList
                             data={products}
                             keyExtractor={(item) => item.id}
@@ -143,6 +144,9 @@ const styles = StyleSheet.create({
     totalPrice: {
         fontSize: 20,
         marginVertical: 5
+    },
+    containerList: {
+        height: "65%"
     },
     containerButtons: {
         //alignItems: "center",
