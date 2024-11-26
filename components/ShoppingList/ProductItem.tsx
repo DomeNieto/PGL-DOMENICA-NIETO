@@ -5,9 +5,10 @@ import { colors } from "../../styles/Colors";
 
 export type ProductItemProps = {
     product: Product;
+    onDelete: (id: string) => void;
 }
 
-export function ProductItem({ product }: ProductItemProps) {
+export function ProductItem({ product, onDelete }: ProductItemProps) {
     const getCategoryImage = (category: string) => {
         const images: { [key: string]: any } = {
             panaderia: require("../../assets/bakery.png"),
@@ -30,6 +31,11 @@ export function ProductItem({ product }: ProductItemProps) {
                 <Text>Cantidad: {product.quantity}</Text>
                 <Text>Precio: €{product.unitPrice.toFixed(2)}</Text>
             </View>
+            <View>
+                <Pressable onPress={() => onDelete(product.id)}>
+                    <Text style={styles.deleteButton}>Eliminar</Text>
+                </Pressable>
+            </View>
         </View>
     );
 }
@@ -38,8 +44,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         marginVertical: 10,
-        //alignItems: "center",
-        //justifyContent: "center"
         marginBottom: 10,
         borderColor: colors.cardsDarkMode,
         borderWidth: 2,
@@ -53,6 +57,15 @@ const styles = StyleSheet.create({
     image: {
         width: 50,
         height: 50
-    }
+    },
+    deleteButton: {
+        color: colors.primaryLightColor,
+        backgroundColor: colors.cardsDarkMode,
+        padding: 5,
+        fontSize: 12,
+        width: 100,
+        textAlign: "center",
+        borderRadius: 3
+    },
 
 });
