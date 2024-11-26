@@ -55,6 +55,13 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
             unitPrice: parseFloat(formData.unitPrice),
             inCart: initialData?.inCart || false,
         });
+
+        setFormData({
+            name: "",
+            category: "others",
+            quantity: "",
+            unitPrice: ""
+        })
     };
 
     return (
