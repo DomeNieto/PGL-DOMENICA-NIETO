@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Product } from './interface/Product';
 import { StyleSheet, View, Text, FlatList, Pressable, Image } from "react-native";
+
 import { colors } from '../../styles/Colors';
+import { Product } from './interface/Product';
+import { ProductItem } from '../../components/ShoppingList/ProductItem';
+import { ProductForm } from '../../components/ShoppingList/ProductForm';
+
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from "uuid";
-import React from 'react';
-import { ProductItem } from '../../components/ShoppingList/ProductItem';
 
 export const ShoppingListPage = () => {
     const initializeProducts = () => [
@@ -15,49 +17,99 @@ export const ShoppingListPage = () => {
     ];
 
     const [products, setProducts] = useState<Product[]>(initializeProducts);
+    const [formModalVisible, setFormModalVisible] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
 
     const totalPrice = products.reduce(
-        (acc, product) => (product.inCart ? acc : acc + product.quantity * product.unitPrice),
+        (acc, product) => (product.inCart ? acc + product.quantity * product.unitPrice : acc),
         0
     );
 
+    const toggleFormModal = () => setFormModalVisible(!formModalVisible);
+
     const handleDeleteProduct = (id: string) => {
         setProducts((prev) => prev.filter((product) => product.id !== id));
+
+    };
+
+    const handleSaveProduct = (productData: Product) => {
+        if (editingProduct) {
+            setProducts((prev) =>
+                prev.map((product) =>
+                    product.id === editingProduct.id
+                        ? { ...productData, id: editingProduct.id }
+                        : product
+                )
+            );
+        } else {
+            setProducts((prev) => [...prev, { ...productData, id: uuidv4(), inCart: false }]);
+        }
+        setEditingProduct(null);
+        toggleFormModal();
+    };
+
+    const handleToggleInCart = (id: string) => {
+        setProducts((prev) =>
+            prev.map((product) =>
+                product.id === id ? { ...product, inCart: !product.inCart } : product
+            )
+        );
     };
 
     return (
         <View style={styles.container}>
-            <View style={styles.containerTitle}>
-                <Text style={styles.header}>LISTA DE COMPRA</Text>
-            </View>
-            <View style={styles.containerPrice}>
-                <Image
-                    style={
-                        styles.shoppingCard
+            {!formModalVisible && (
+                <>
+                    <View style={styles.containerTitle}>
+                        <Text style={styles.header}>LISTA DE COMPRA</Text>
+                    </View>
+                    <View style={styles.containerPrice}>
+                        <Image
+                            style={
+                                styles.shoppingCard
 
-                    }
-                    source={require("../../assets/CarritoCompraModClaro.png")}
-                />
-                <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
-            </View>
-            <FlatList
-                data={products}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <ProductItem
-                        product={item}
-                        onDelete={handleDeleteProduct}
-                    />
-                )}
-                ListEmptyComponent={<Text style={styles.emptyText}>La lista está vacía</Text>}
+                            }
+                            source={require("../../assets/CarritoCompraModClaro.png")}
+                        />
+                        <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
+                    </View>
+
+                    <View style={styles.containerList}>
+                        <FlatList
+                            data={products}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <ProductItem
+                                    product={item}
+                                    onEdit={(product) => {
+                                        setEditingProduct(product);
+                                        toggleFormModal();
+                                    }}
+                                    onDelete={handleDeleteProduct}
+                                    onToggleInCart={handleToggleInCart}
+                                />
+                            )}
+                            ListEmptyComponent={<Text style={styles.emptyText}>La lista está vacía</Text>}
+                        />
+                    </View>
+                    <View style={styles.containerButtons}>
+                        <Pressable style={styles.addButton} onPress={toggleFormModal}>
+                            <Text style={styles.addButtonText}>Añadir Producto</Text>
+                        </Pressable>
+                    </View>
+                </>
+            )}
+
+            <ProductForm
+                visible={formModalVisible}
+                initialData={editingProduct}
+                onSave={handleSaveProduct}
+                onCancel={() => {
+                    setEditingProduct(null);
+                    toggleFormModal();
+                }}
             />
-
-            <View style={styles.containerButtons}>
-                <Pressable style={styles.addButton}>
-                    <Text style={styles.addButtonText}>Añadir Producto</Text>
-                </Pressable>
-            </View>
-
         </View>
 
     );
@@ -67,7 +119,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 3,
-        //alignItems: "center"
     },
     containerTitle: {
         width: "100%",
@@ -93,6 +144,9 @@ const styles = StyleSheet.create({
     totalPrice: {
         fontSize: 20,
         marginVertical: 5
+    },
+    containerList: {
+        height: "65%"
     },
     containerButtons: {
         //alignItems: "center",
