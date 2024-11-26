@@ -23,11 +23,29 @@ export type ProductFormProps = {
 
 export function ProductForm({ visible, initialData, onSave, onCancel }: ProductFormProps) {
     const [formData, setFormData] = useState({
-        name: initialData?.name || "",
-        category: initialData?.category || "others",
-        quantity: initialData?.quantity.toString() || "",
-        unitPrice: initialData?.unitPrice.toString() || "",
+        name: "",
+        category: "others",
+        quantity: "",
+        unitPrice: "",
     });
+
+    const handleModalOpen = () => {
+        if (initialData) {
+            setFormData({
+                name: initialData?.name || "",
+                category: initialData?.category || "others",
+                quantity: initialData?.quantity.toString() || "",
+                unitPrice: initialData?.unitPrice.toString() || "",
+            });
+        } else {
+            setFormData({
+                name: "",
+                category: "others",
+                quantity: "",
+                unitPrice: "",
+            });
+        }
+    };
 
     const handleSave = () => {
         if (!formData.name.trim()) {
@@ -56,16 +74,10 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
             inCart: initialData?.inCart || false,
         });
 
-        setFormData({
-            name: "",
-            category: "others",
-            quantity: "",
-            unitPrice: ""
-        })
     };
 
     return (
-        <Modal visible={visible} animationType="slide" transparent>
+        <Modal visible={visible} animationType="slide" transparent onShow={handleModalOpen}>
             <View style={styles.container}>
                 <Text style={styles.header}>
                     {initialData ? "Editar Producto" : "Añadir Producto"}
@@ -76,16 +88,19 @@ export function ProductForm({ visible, initialData, onSave, onCancel }: ProductF
                     value={formData.name}
                     onChangeText={(text) => setFormData({ ...formData, name: text })}
                 />
-                <RNPickerSelect
-                    onValueChange={(value) => setFormData({ ...formData, category: value })}
-                    items={categories}
-                    value={formData.category}
-                    placeholder={{ label: "Selecciona una categoría", value: null }}
-                    style={{
-                        inputIOS: styles.picker,
-                        inputAndroid: styles.picker,
-                    }}
-                />
+                <View style={styles.select}>
+                    <Text style={styles.category}>Seleccione una Categoría :</Text>
+                    <RNPickerSelect
+                        onValueChange={(value) => setFormData({ ...formData, category: value })}
+                        items={categories}
+                        value={formData.category}
+                        placeholder={{ label: "CATEGORÍAS DISPONIBLES: ", value: null }}
+                        style={{
+                            inputAndroid: styles.picker
+                        }}
+                    />
+
+                </View>
                 <TextInput
                     style={styles.input}
                     placeholder="Cantidad"
@@ -164,11 +179,18 @@ const styles = StyleSheet.create({
             "center"
     },
     picker: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 5,
-        //padding: 10,
-        marginBottom: 10,
         backgroundColor: "#fff",
+        width: 120
     },
+    select: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    category: {
+        width: "60%",
+        marginVertical: 15,
+        borderRightColor: colors.textLightMode,
+        fontSize: 14,
+        marginLeft: 3
+    }
 });
