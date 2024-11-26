@@ -21,6 +21,10 @@ export const ShoppingListPage = () => {
         0
     );
 
+    const handleDeleteProduct = (id: string) => {
+        setProducts((prev) => prev.filter((product) => product.id !== id));
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.containerTitle}>
@@ -42,6 +46,7 @@ export const ShoppingListPage = () => {
                 renderItem={({ item }) => (
                     <ProductItem
                         product={item}
+                        onDelete={handleDeleteProduct}
                     />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>La lista está vacía</Text>}
