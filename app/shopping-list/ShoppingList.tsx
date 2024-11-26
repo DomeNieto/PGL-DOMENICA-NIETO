@@ -26,6 +26,12 @@ export const ShoppingListPage = () => {
                 />
                 <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
             </View>
+            <View style={styles.containerButtons}>
+                <Pressable style={styles.addButton}>
+                    <Text style={styles.addButtonText}>Añadir Producto</Text>
+                </Pressable>
+            </View>
+
         </View>
 
     );
@@ -60,5 +66,22 @@ const styles = StyleSheet.create({
     totalPrice: {
         fontSize: 20,
         marginVertical: 5
+    },
+    containerButtons: {
+        //alignItems: "center",
+        marginLeft: "33%",
+        position: "absolute",
+        bottom: "15%"
+    },
+    addButton: {
+        backgroundColor: colors.bottomLightColor,
+        padding: 10,
+        marginTop: 10,
+        borderRadius: 5,
+        width: "100%",
+        alignItems: "center"
+    },
+    addButtonText: {
+        color: colors.primaryLightColor,
     }
 });
