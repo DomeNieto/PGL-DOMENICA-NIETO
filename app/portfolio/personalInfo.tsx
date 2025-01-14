@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import Project from "../../../components/PersonalInfo/Project";
-import { Projects } from "../../../components/PersonalInfo/Data/Projects";
-import Skill from "../../../components/PersonalInfo/Skill";
-import { Skills } from "../../../components/PersonalInfo/Data/Skills";
-import Technology from "../../../components/PersonalInfo/Technology";
-import { Technologies } from "../../../components/PersonalInfo/Data/Technologies";
-import { RenderManagerContext } from "../../../context/RenderManagerContext";
-import { colors } from "../../../styles/Colors";
+import Project from "../../components/PersonalInfo/Project";
+import { Projects } from "../../components/PersonalInfo/Data/Projects";
+import Skill from "../../components/PersonalInfo/Skill";
+import { Skills } from "../../components/PersonalInfo/Data/Skills";
+import Technology from "../../components/PersonalInfo/Technology";
+import { Technologies } from "../../components/PersonalInfo/Data/Technologies";
+import { RenderManagerContext } from "../../context/RenderManagerContext";
+import { colors } from "../../styles/Colors";
 
 
 const InfoListPage = () => {
