@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import { Tabs } from "expo-router";
 import Entypo from "@expo/vector-icons/Entypo";
 
-import { RenderManagerContext } from "../../context/RenderManagerContext";
-import PortfolioHeader from "../../components/portfolio-header/PortfolioHeader";
-import { colors } from "../../styles/Colors";
+import { RenderManagerContext } from "../../../context/RenderManagerContext";
+import PortfolioHeader from "../../../components/portfolio-header/PortfolioHeader";
+import { colors } from "../../../styles/Colors";
 
 
 const TabsLayout = () => {
