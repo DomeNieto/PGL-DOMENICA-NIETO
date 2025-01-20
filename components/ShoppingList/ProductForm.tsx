@@ -1,5 +1,5 @@
 import { StyleSheet, View, Modal, Text, TextInput, Pressable } from "react-native";
-import { Product } from "../../app/shopping-list/interface/Product";
+import { Product } from "../../app/(drawer)/shopping-list/interface/Product";
 import RNPickerSelect from "react-native-picker-select";
 import { useState } from "react";
 import { colors } from "../../styles/Colors";

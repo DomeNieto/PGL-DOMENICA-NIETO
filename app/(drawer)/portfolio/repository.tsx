@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 
 
-import { RenderManagerContext } from "../../context/RenderManagerContext";
-import { colors } from "../../styles/Colors";
+import { RenderManagerContext } from "../../../context/RenderManagerContext";
+import { colors } from "../../../styles/Colors";
 import QRCode from "react-native-qrcode-svg";
 
 

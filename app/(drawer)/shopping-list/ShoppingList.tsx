@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { StyleSheet, View, Text, FlatList, Pressable, Image } from "react-native";
 
-import { colors } from '../../styles/Colors';
+import { colors } from '../../../styles/Colors';
 import { Product } from './interface/Product';
-import { ProductItem } from '../../components/ShoppingList/ProductItem';
-import { ProductForm } from '../../components/ShoppingList/ProductForm';
+import { ProductItem } from '../../../components/ShoppingList/ProductItem';
+import { ProductForm } from '../../../components/ShoppingList/ProductForm';
 
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from "uuid";
 import React from 'react';
+import { ExpoRoot } from 'expo-router';
 
-export const ShoppingListPage = () => {
+const ShoppingListPage = () => {
   const initializeProducts = () => [
     { id: uuidv4(), name: 'Manzanas', category: 'frutas/verduras', quantity: 2, unitPrice: 1.5, inCart: false },
     { id: uuidv4(), name: 'Pan', category: 'panaderia', quantity: 1, unitPrice: 2.0, inCart: false },
@@ -72,7 +73,7 @@ export const ShoppingListPage = () => {
                 styles.shoppingCard
 
               }
-              source={require("../../assets/CarritoCompraModClaro.png")}
+              source={require("../../../assets/CarritoCompraModClaro.png")}
             />
             <Text style={styles.totalPrice}> €{totalPrice.toFixed(2)}</Text>
           </View>
@@ -122,6 +123,7 @@ export const ShoppingListPage = () => {
 
   );
 }
+export default ShoppingListPage;
 
 const styles = StyleSheet.create({
   container: {

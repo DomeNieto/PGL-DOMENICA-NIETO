@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable, Image } from "react-native";
-import { Product } from "../../app/shopping-list/interface/Product";
+import { Product } from "../../app/(drawer)/shopping-list/interface/Product";
 import { colors } from "../../styles/Colors";
 
 export type ProductItemProps = {
