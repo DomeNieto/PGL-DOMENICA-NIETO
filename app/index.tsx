@@ -2,7 +2,7 @@ import { Redirect } from "expo-router";
 
 export default function AppPage() {
     return (
-        < Redirect href="/welcome/WelcomePage" ></Redirect >
+        < Redirect href="/register/RegisterPage" ></Redirect >
     )
 
 }
