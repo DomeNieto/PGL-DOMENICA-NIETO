@@ -1,11 +1,11 @@
-import { NavigationContext } from '@react-navigation/native';
 import React, { useState } from 'react'
-import { Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from 'react-native';
 import { StyleSheet } from "react-native";
 
-import { registerUser } from '../../service/UserService';
+
 import { colors } from '../../styles/Colors';
 import { router } from 'expo-router';
+import { UserService } from '../../service/UserService';
 
 
 export default function RegisterPage() {
@@ -26,7 +26,7 @@ export default function RegisterPage() {
         }
 
         try {
-            const results = await registerUser({
+            const results = await UserService.registerUser({
                 fullname: data.fullname,
                 email: data.email,
                 pswd: data.pswd
@@ -49,6 +49,7 @@ export default function RegisterPage() {
             }
 
         } catch (error) {
+            console.error("Error al registrar:", error);
             window.alert("Error inesperado al registrar el usuario. Por favor, intenta de nuevo.");
         }
     };
