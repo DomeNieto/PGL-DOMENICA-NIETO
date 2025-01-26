@@ -25,6 +25,7 @@ const TabsLayout = () => {
                 name="personalInfo"
                 options={{
                     title: "CV",
+                    href: "/portfolio/personalInfo",
                     tabBarIcon: () => <Entypo name="list" size={23} style={[
                         { color: darkMode ? colors.primaryLightColor : colors.textLightMode },
                     ]} />,
@@ -36,6 +37,7 @@ const TabsLayout = () => {
                 name="repository"
                 options={{
                     title: "Repositorio",
+                    href: "/portfolio/repository",
                     tabBarIcon: () => <Entypo name="github" size={23} style={[
                         { color: darkMode ? colors.primaryLightColor : colors.textLightMode },
                     ]} />,
