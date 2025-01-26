@@ -39,7 +39,14 @@ const Layout = () => {
                                 title: "Lista de compras",
                             }}
                         />
+                        <Drawer.Screen
+                            name="logout/Logout"
+                            options={{
+                                drawerLabel: 'Cerrar Sesión',
+                                title: 'Cerrar sesión',
+                            }}
 
+                        />
 
                     </Drawer>
                 </View>

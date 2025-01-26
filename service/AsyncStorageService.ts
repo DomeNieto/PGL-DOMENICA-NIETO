@@ -21,3 +21,11 @@ export const getToken = async () => {
         return null;
     }
 };
+
+export const removeToken = async () => {
+    try {
+        await AsyncStorage.removeItem('my-token');
+    } catch (e) {
+        console.log(`AsyncStorage Error: ${e}`);
+    }
+}
