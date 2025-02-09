@@ -40,6 +40,14 @@ const Layout = () => {
                             }}
                         />
                         <Drawer.Screen
+                            name="camera/CameraViewScreen"
+                            options={{
+                                drawerLabel: 'Camara',
+                                title: 'Camara',
+                            }}
+
+                        />
+                        <Drawer.Screen
                             name="logout/Logout"
                             options={{
                                 drawerLabel: 'Cerrar Sesión',
