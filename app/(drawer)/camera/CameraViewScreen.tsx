@@ -1,8 +1,10 @@
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
-import { Button, Modal, Text, TouchableOpacity, View, StyleSheet, Pressable } from "react-native";
+import { Modal, Text, TouchableOpacity, View, StyleSheet, Pressable, Image } from "react-native";
 import { colors } from "../../../styles/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { FlatList } from "react-native-gesture-handler";
+import { CameraService } from "../../../service/CameraService";
 
 interface Photo {
     id: number;
@@ -11,17 +13,49 @@ interface Photo {
     encodedData: string;
 }
 
-
 const CameraViewScreen = () => {
     const [facing, setFacing] = useState<CameraType>('back');
-
     const [cameraOpen, setCameraOpen] = useState(false);
     const cameraRef = useRef<CameraView | null>(null);
-
     const [cameraPermission, requestCameraPermission] = useCameraPermissions();
 
-    useEffect(() => {
+    const [images, setImages] = useState<Photo[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [imageVisible, setImageVisible] = useState<String>();
 
+    const loadImages = async () => {
+        setLoading(true);
+        try {
+            const photos = await CameraService.fetchPhotos();
+            setImages(photos || []);
+        } catch (error) {
+            console.error('Error loading images:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const takePicture = async () => {
+        if (cameraRef.current) {
+            try {
+                const photo = await cameraRef.current.takePictureAsync({ base64: true });
+                if (!photo || !photo.base64) {
+                    throw new Error("No se pudo capturar la imagen.");
+                }
+                await CameraService.postPhotos(photo.base64, photo.width, photo.height);
+                setCameraOpen(false);
+                loadImages();
+            } catch (error) {
+                console.error('Error taking picture:', error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (cameraPermission) {
+            setLoading(false);
+        }
+        loadImages()
     }, [cameraPermission]);
 
 
@@ -40,9 +74,44 @@ const CameraViewScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.textPhotos}>
-                No hay fotos disponibles
-            </Text>
+            {loading ? (
+                <Text>Cargando</Text>
+            ) : images.length > 0 ? (
+                <>
+                    <FlatList
+                        data={images}
+                        keyExtractor={(item) => item.id.toString()}
+                        numColumns={3}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity onPress={() => setImageVisible(item.encodedData)}>
+                                <Image
+                                    source={{ uri: `data:image/png;base64,${item.encodedData}` }}
+                                    style={styles.thumbnail}
+                                />
+
+                            </TouchableOpacity>
+
+                        )}
+
+                    />
+                    <Modal visible={!!imageVisible} style={styles.modal}>
+                        <TouchableOpacity onPress={() => setImageVisible("")}>
+                            <Image
+                                source={{ uri: `data:image/png;base64,${imageVisible}` }}
+                                style={styles.image}
+                            />
+
+                        </TouchableOpacity>
+
+                    </Modal>
+
+                </>
+            ) : (
+                <Text style={styles.textPhotos}>
+                    No hay fotos disponibles
+                </Text>
+            )}
+
             <TouchableOpacity style={styles.captureButton} onPress={() => setCameraOpen(true)}>
                 <Text style={styles.text}>Abrir camara</Text>
             </TouchableOpacity>
@@ -53,7 +122,7 @@ const CameraViewScreen = () => {
                     <TouchableOpacity onPress={() => setFacing(facing === 'back' ? 'front' : 'back')}>
                         <Ionicons name="camera-reverse" size={40} color={colors.bottomLightColor} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={takePicture}>
                         <Ionicons name="disc" size={55} color={colors.bottomLightColor} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setCameraOpen(false)}>
@@ -84,8 +153,9 @@ const styles = StyleSheet.create({
         backgroundColor: colors.bottomLightColor,
         height: 70,
         borderRadius: 7,
+        marginBottom: "10%"
     }, text: {
-        color: 'white',
+        color: colors.primaryLightColor,
         fontSize: 18,
         margin: 20,
     }, thumbnail: {
@@ -119,5 +189,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: "center",
         marginBottom: 20
+    }, image: {
+        width: 300,
+        height: 600,
+        justifyContent: "center",
+        marginHorizontal: "8%",
+        marginTop: "25%"
+    }, modal: {
+        width: "50%",
+        backgroundColor: colors.cardsDarkMode,
+        padding: 10
     }
 });
