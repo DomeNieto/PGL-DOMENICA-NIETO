@@ -5,6 +5,7 @@ import { colors } from "../../../styles/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { CameraService } from "../../../service/CameraService";
+import Loader from "../../../components/Loader/Loader";
 
 interface Photo {
     id: number;
@@ -58,6 +59,13 @@ const CameraViewScreen = () => {
         loadImages()
     }, [cameraPermission]);
 
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Loader />
+            </View>
+        );
+    }
 
     if (!cameraPermission?.granted) {
         return (
@@ -75,7 +83,9 @@ const CameraViewScreen = () => {
     return (
         <View style={styles.container}>
             {loading ? (
-                <Text>Cargando</Text>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Loader />
+                </View>
             ) : images.length > 0 ? (
                 <>
                     <FlatList
