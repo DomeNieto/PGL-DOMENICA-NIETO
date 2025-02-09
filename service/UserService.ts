@@ -1,9 +1,7 @@
 import { UserLoginType, UserRegisterType } from "../types/UserType";
 import { RequestService } from "./RequestService";
 
-
 const API_URL = "http://192.168.0.14:5000/auth"
-
 
 const registerUser = async (data: UserRegisterType) => {
     try {
